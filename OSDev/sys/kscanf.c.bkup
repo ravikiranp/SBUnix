@@ -1,0 +1,127 @@
+#include <defs.h>
+#include <function.h>
+#include "helper.h"
+
+
+extern volatile int kbd_global;
+extern char kbd_buf[];
+extern int kbd_buf_index;
+
+int read_int(uint64_t* var_addr) {
+	
+	uint64_t temp;
+	// Flushing the keyboard buffer
+	kbd_buf_index = 0;
+	kbd_global = 0;
+	print_out("Reading integer from user\n");
+	
+	while(kbd_global != 1);
+	
+	print_out("%s",kbd_buf);
+	kbd_buf[kbd_buf_index] = '\0';
+	
+	//ret_val = check_int(kbd_buf);
+	//if(ret_val == -1)
+		//return -1;
+	
+	temp = atoi(kbd_buf,10);
+	if(temp == -1)
+		return temp;
+	*var_addr = temp;
+
+	print_out("input val is %d \n",temp);
+	//strcpy((char*)var_addr,kbd_buf);
+
+	return 0;		
+}
+
+int read_str(uint64_t* var_addr) {
+	// Flushing the keyboard buffer
+	kbd_buf_index = 0;
+	kbd_global = 0;
+	print_out("Reading a string from input..");
+	
+	
+	while(kbd_global != 1);
+//	print_out("Yippee..read from buf now..");
+	
+	
+	print_out("%s",kbd_buf);
+	kbd_buf[kbd_buf_index] = '\0';
+	strcpy((char*)var_addr,kbd_buf);
+
+	print_out(" \n %d chars read",kbd_buf_index);
+	return 0;
+}
+
+int read_hex(uint64_t* var_addr){
+	        
+        uint64_t temp;
+        // Flushing the keyboard buffer
+        kbd_buf_index = 0;
+        kbd_global = 0;
+        print_out("Reading integer from user\n");
+
+        while(kbd_global != 1);
+
+        print_out("%s",kbd_buf);
+        kbd_buf[kbd_buf_index] = '\0';
+
+        //ret_val = check_int(kbd_buf);
+        //if(ret_val == -1)
+                //return -1;
+
+        temp = atoi(kbd_buf,16);
+	if(temp == -1) 
+		return temp;	
+
+        *var_addr = temp;
+
+        print_out("input val is %d \n",temp);
+	return 0;
+}
+
+int kscanf(char* format,uint64_t* var_addr) {
+
+//	char buf[1024];
+	char* str = format;
+	int ret_val = 0;
+	
+	 while(*str != '\0') {
+                if((*str != '%') || (*(str+1) == '\0')) {
+                        //write_char(*str++);
+                }
+                else
+                {
+                        switch(*(str+1)) {
+                                case 'd':
+                                          ret_val = read_int(var_addr);
+					  if(ret_val == -1) {
+						print_out("scanf: error in input!!");
+						return ret_val;
+					  }
+                                          break;
+
+                                case 's':
+                                          ret_val = read_str(var_addr);
+					  if(ret_val == -1) {
+						print_out("scanf: error in input!!");
+						return ret_val;
+					  }
+                                          break;
+
+                                case 'x':
+                                          ret_val = read_hex(var_addr);
+					  if(ret_val == -1) {
+						print_out("scanf: error in input!!");
+						return ret_val;
+					  }
+                                          break;
+			}
+			str+=2;
+		}
+	}
+
+
+return ret_val;
+}

@@ -1,0 +1,5 @@
+Initial Map - 10MB
+Virtual address 0xffffffff80000000 to 0xffffffff9fffffff is mapped to physical addresses 0x000000 to 0x9fffff
+the kernel starts from 0xffffffff80000000 + physfree
+0MB to 1MB is mapped before the kernel to 0xffffffff8000000 to 0xffffffff80100000
+Video memory console_output_pointer is at 0xffffffff800b8000 

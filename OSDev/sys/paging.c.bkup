@@ -1,0 +1,93 @@
+#include <defs.h>
+#include<function.h>
+void create_page_tables(void* mem_free) {
+	/* pml4e table at freemem */
+	uint64_t *pml4e_ptr = (uint64_t *) mem_free;
+	
+	/* page-directory ptr table */
+	uint64_t *pdptr_table = pml4e_ptr + 512;
+
+	/* page-directory table */
+	uint64_t *pd_table = pdptr_table + 512;
+
+	/* page-table */
+	uint64_t *pg_table = pd_table + 512;
+
+	// Array of 512 page tables to map 1GB of memory
+	// pg_table[0] to pg_table[511]	
+	
+
+	/* Offsets in each of the tables */
+	uint16_t pml4e_offset;
+	uint16_t pdptr_table_offset;
+	uint16_t pd_table_offset;
+	uint16_t pg_table_offset;
+	
+	uint64_t vaddr = 0xffffffff80200000;
+		
+	/* Map the kernel to a high region in memory */
+	pml4e_offset = ((0x0000ff8000000000 & vaddr) >> 39);
+	print_out("  pml4e_offset is %x ",pml4e_offset );
+
+	pdptr_table_offset = ((0x0000007f80000000 & vaddr) >> 30);
+	print_out(" pdptr_table_offset is %x ",pdptr_table_offset );
+	
+	pd_table_offset = ((0x000000003fe00000 & vaddr) >> 21);
+	print_out(" pd_table_offset is %x ",pd_table_offset );
+	
+	pg_table_offset = ((0x00000000001ff000 & vaddr) >> 12 );
+	print_out(" pg_table_offset is %x ",pg_table_offset );
+
+	uint16_t offset = 0;
+	for(offset = 0; offset < 512; offset++) {
+		if(offset == pml4e_offset) {
+			pml4e_ptr[offset] = ((uint64_t)pdptr_table) | 7;
+		}
+		else
+			pml4e_ptr[offset] = 0;
+		
+	}	
+
+	for(offset = 0; offset < 512; offset++) {
+		if(offset == pdptr_table_offset ) {
+			pdptr_table[offset] = ((uint64_t) pd_table) | 7;
+		}
+		else
+			pdptr_table[offset] = 0;
+		
+	}	
+
+	for(offset = 0; offset < 512; offset++) {
+		if(offset == pd_table_offset) {
+			pd_table[offset] = ((uint64_t)pg_table) | 7;
+		}
+		else
+			pd_table[offset] = 0;
+		
+	}
+
+	uint64_t address = 0x200000;
+
+	for(offset = 0; offset < 512; offset++) {
+		pg_table[offset] = (address) | 7;
+		address += 4096;
+	}		
+
+	pg_table = pg_table + 512;	
+	pd_table[0] = (uint64_t)pg_table | 7;
+	address = 0x000000;
+	for(offset = 0; offset < 512; offset++) {
+                pg_table[offset] = (address) | 7;
+                address += 4096;
+        }
+	
+	print_out("  address is %x  ", address);	
+	print_out("  the address of pml4e is %p   the address of pdptr_table is %p     the address of pd_table is %p      the address of pg_table is %p   ", pml4e_ptr, pdptr_table,pd_table,pg_table);
+	print_out("   The contents of pml4e at offset %d is %x      The contents of pdptr at offset %d is %x             The contents of pd_table at offset %d is %x", pml4e_offset, pml4e_ptr[pml4e_offset],pdptr_table_offset,pdptr_table[pdptr_table_offset],pd_table_offset,pd_table[pd_table_offset]);	
+
+	asm volatile("movq %0,%%cr3"
+			:
+			: "b" (pml4e_ptr)				
+		); 
+	print_out("      YIPEE!!!!!");
+}

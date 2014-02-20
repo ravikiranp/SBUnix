@@ -1,0 +1,103 @@
+#define va_start(v,l) __builtin_va_start(v,l)
+#define va_arg(v,l)   __builtin_va_arg(v,l)
+#define va_end(v)     __builtin_va_end(v)
+#define va_copy(d,s)  __builtin_va_copy(d,s)
+#include <function.h>
+extern int scan_keybrd;
+extern char keybrd_scan[];
+extern int keybrd_offset;
+
+typedef __builtin_va_list va_list;
+void haha(){ }
+void scan_in(char* temp,...) {
+//void scan_in() {
+	long int i=0;
+	scan_keybrd = 1;
+	keybrd_offset = 0;
+	
+	//while(scan_keybrd == 1)
+	//{
+		for(i=0; i<1000000000; i++)
+			;
+	//}
+
+	//if (scan_keybrd == 0) { 
+		print_out("    The scanned string is %s       ",keybrd_scan);
+	//}
+
+	haha();
+	
+	va_list ap;
+	char* str;
+	//char str_temp[50];
+	int offset = 0;
+
+	va_start(ap,temp);
+	str = temp;
+	// Parse the string str to get the format specifiers
+	while(*str != '\0' && keybrd_scan[offset] != '\0') {
+		if((*str != '%') || (*(str+1) == '\0')) {
+			//write_char(*str++);
+		}
+		else
+		{
+			char temp_ch;
+			//int temp_int;
+			//int temp_hex;
+			//void* ptr;
+			//char* temp_str;
+
+			switch(*(str+1)) {
+			/*
+				case 'd': 
+					  temp_int = va_arg(ap,int);
+					  //write_int(temp_int,str_temp,10);
+					  while (*keybrd_scan != ' ')
+						*temp_str++ = *keybrd_scan++;
+					  *temp_str = '\0';
+					  &temp_int 
+					  break;
+			*/	
+				case 'c': 
+					  temp_ch = va_arg(ap,int);
+					  temp_ch = keybrd_scan[offset];
+					  offset++;
+					  //write_char(temp_ch);
+					  print_out("%c",temp_ch);
+					  break;
+
+			/*
+				case 'x': 
+					  temp_hex = va_arg(ap, int);
+					  write_int(temp_hex,str_temp,16);
+					  break;
+
+				case 'p': 
+					  ptr = va_arg(ap,void*);
+					  long int longint;
+					  char temp_intp[50];
+					  asm ("mov %0,%%r9"
+                				: "=r" (longint)
+                				: "r" (ptr)
+                				);
+					  write_intp(longint,temp_intp,16);
+					  break;
+
+				case 's': 
+					  temp_str = va_arg(ap,char*);
+					  write_str(temp_str);
+					  break;
+
+				case '%': if (*(str+2) != '\0')
+					  	str += 1;
+			*/
+				default: ;//write_char(*str); 
+					  //write_char(*(str+1));
+					
+			}
+
+			str += 2;
+		}
+	}
+	va_end(ap);
+}

@@ -2,14 +2,14 @@
 #include <function.h>
 /*
  * Copy src string to dest string.
- * Return 0 on success. 1 on failure
+ * Return 1 on success. 0 on failure
  *
  */
 
 unsigned char strcpy(char* dest,const char* src) {
 
-        //if((src == NULL) || (dest == NULL) )
-         //       return 0;
+        if((src == NULL) || (dest == NULL) )
+               return 0;
 
         int i = 0;
 

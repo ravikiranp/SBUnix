@@ -227,7 +227,8 @@ void setup_user_readdir_int() {
         build_idt_desc(IRQ_93,(uint64_t)user_readdir_int,8,attr);
 }
 
-void user_closedir_int();
+void user_closedir_int(); 
+
 
 void setup_user_closedir_int() {
 

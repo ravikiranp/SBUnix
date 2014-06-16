@@ -111,7 +111,7 @@ void register_tarfs(uint64_t parse_ptr) {
                 print_out("Header offset is %x, ",fs_nodes[index].file_header_offset);
                 print_out("%s,   ",fs_nodes[index].name);
                 print_out("Type is %d",fs_nodes[index].typeflag);
-		print_out("parent dir node index is %d\n", fs_nodes[index].parent_dir_node_index);
+				print_out("parent dir node index is %d\n", fs_nodes[index].parent_dir_node_index);
                 print_out("  Size is %d\n",fs_nodes[index].size);
 
 		
@@ -131,26 +131,24 @@ void register_fs(uint64_t fs_entry) {
 
 int tarfs_open(const char* filename) {
 
-int index = 0;
+		int index = 0;
 
-for(index = 0; index < num_fs_nodes; index++){
-		if(strcmp(filename,fs_nodes[index].name)){
-			
-		//elf_parser(fs_nodes[index].file_header_offset + 512);
-                //print_out("Header offset is %x, ",fs_nodes[index].file_header_offset);
-			return index;	
+		for(index = 0; index < num_fs_nodes; index++){
+				if(strcmp(filename,fs_nodes[index].name)){
+
+						//elf_parser(fs_nodes[index].file_header_offset + 512);
+						//print_out("Header offset is %x, ",fs_nodes[index].file_header_offset);
+						return index;	
+				}
+				//print_out("%s,   ",fs_nodes[index].name);
+				//print_out("Type is %d",fs_nodes[index].typeflag);
+				//print_out("  Size is %d\n",fs_nodes[index].size);
 		}
-                //print_out("%s,   ",fs_nodes[index].name);
-                //print_out("Type is %d",fs_nodes[index].typeflag);
-                //print_out("  Size is %d\n",fs_nodes[index].size);
 
-
-        }
-
-// file not found. Return -1 to indicate error
-//print_out("\nFile not found!!");
-return -1;
-// return index of fs_node with the requested 
+		// file not found. Return -1 to indicate error
+		//print_out("\nFile not found!!");
+		return -1;
+		// return index of fs_node with the requested 
 }
 
 

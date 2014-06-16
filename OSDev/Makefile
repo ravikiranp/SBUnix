@@ -1,8 +1,8 @@
 CC=gcc
 AS=as
-CFLAGS=-O1 -std=c99 -Wall -Werror -nostdinc -Iinclude -msoft-float -mno-sse -mno-red-zone -fno-builtin -fPIC -march=amdfam10 -g3
+CFLAGS=-O1 -std=c99 -Wall -Werror -fno-stack-protector -nostdinc -Iinclude -msoft-float -mno-sse -mno-red-zone -fno-builtin -fPIC -march=amdfam10 -g3
 LD=ld
-LDLAGS=-nostdlib
+LDLAGS=-nostdlib -no-stack-protector
 AR=ar
 
 ROOTFS=rootfs
@@ -38,7 +38,7 @@ obj/tarfs.o: $(BINS)
 $(ROOTLIB)/libc.a: $(LIBC_SRCS:%.c=obj/%.o)
 	$(AR) rcs $@ $^
 
-$(ROOTLIB)/libc.so: $(LIBC_SRCS:%.c=obj/%.o) $(ROOTLIB)/ld.so
+$(ROOTLIB)/libc.so: $(LIBC_SRCS:%.c=obj/%.o) 
 	$(LD) $(LDLAGS) -shared -soname=$@ --dynamic-linker=/lib/ld.so --rpath-link=/lib -o $@ $^
 
 $(ROOTLIB)/ld.so: $(LD_SRCS:%.c=obj/%.o)

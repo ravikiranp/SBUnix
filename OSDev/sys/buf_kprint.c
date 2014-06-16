@@ -51,6 +51,5 @@ char * bufk_write_intp(long int value, char * str, int base) {
                 *low++ = *ptr;
                 *ptr-- = tmp;
         }
-	//write_str(rc);
 	return rc;
 }

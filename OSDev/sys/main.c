@@ -79,38 +79,6 @@ void start(uint32_t* modulep, void* physbase, void* physfree)
 	file = parse_elf("bin/try");
 	load_file_list = file->load_list;	
 	load_file();
-	//while(load_file_list != NULL) {
-	//	print_out(" CALLING LOAD  ");
-	//	load_file((uint64_t *)file->file_start_ptr,load_file_list->file_offset,load_file_list->file_seg_size,(uint64_t *)load_file_list->v_addr,(uint64_t *)file->entry_point);	
-		//load_file();
-	//	load_file_list = load_file_list->next;
-	//}
-	/*
-	file = parse_elf("bin/abc");
-        load_file_list = file->load_list;
-	load_file();
-	*/
-	/*
-        while(load_file_list != NULL) {
-                print_out(" CALLING LOAD  ");
-                load_file((uint64_t *)file->file_start_ptr,load_file_list->file_offset,load_file_list->file_seg_size,(uint64_t *)load_file_list->v_addr,(uint64_t *)file->entry_point);
-                //load_file();
-                load_file_list = load_file_list->next;
-        }
-	*/
-        //uint16_t task_id = create_task((uint64_t)kernel_thread,100);
-        //create_task((uint64_t)kernel_thread,100);
-	//print_out(" CREATING ONE TASK  WITH ID %d  ",task_id);
-        //uint16_t task_id = create_task((uint64_t)0x4000b0,0);
-	//print_out(" CREATING ONE TASK  WITH ID %d  ",task_id);
-        //task_id = create_task((uint64_t)func3,0);
-	//print_out(" CREATING ONE TASK  WITH ID %d  ",task_id);
-        //task_id = create_task((uint64_t)func1,0);
-	//print_out(" CREATING ONE TASK  WITH ID %d  ",task_id);
-        //task_id = create_task((uint64_t)func2,0);
-	//print_out(" CREATING ONE TASK  WITH ID %d  ",task_id);
-        //create_task((uint64_t)func3,0);
-        //create_task((uint64_t)func5,0);
 
 	switch_to(0);
 	// kernel starts here

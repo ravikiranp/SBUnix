@@ -48,7 +48,7 @@ uint16_t create_task(uint64_t func, uint16_t ppid) {
 
 // Prepare the initial kernel stack 
 	int i=0;
-	uint16_t taskid;
+	uint16_t taskid = 0;
 	
 	if(ppid == 100) {
 		task[0].task_id = 0;
